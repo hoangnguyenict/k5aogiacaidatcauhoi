@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Em muốn hỏi gì về Ảo giác AI?</title>
+  <style>
+    :root{
+      --blue:#1f6feb;
+      --blue-2:#eaf3ff;
+      --green:#2e9d54;
+      --green-bg:#ecfff1;
+      --green-bd:#7ed69a;
+      --text:#1f2937;
+      --muted:#5b6472;
+      --line:#d7deea;
+      --card:#ffffff;
+      --bg:#f4f8fc;
+      --shadow:0 8px 24px rgba(31, 55, 88, 0.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,#eef6ff 0%, #f7fbff 28%, #f4f8fc 100%);
+      font-family: Arial, Helvetica, sans-serif;
+      color:var(--text);
+    }
+    .page{
+      max-width:1100px;
+      margin:24px auto;
+      padding:0 18px 24px;
+    }
+    .sheet{
+      background:var(--card);
+      border:2px solid #bfd7f7;
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .header{
+      background:linear-gradient(135deg,#dff0ff 0%, #f0f8ff 100%);
+      border-bottom:2px solid #bfd7f7;
+      padding:16px 22px 20px;
+      position:relative;
+    }
+    .credit{
+      font-size:14px;
+      color:#32557b;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+    .title{
+      font-size:32px;
+      font-weight:800;
+      color:#13457b;
+      margin:0;
+      line-height:1.2;
+      letter-spacing:0.2px;
+    }
+    .subtitle{
+      margin-top:10px;
+      font-size:15px;
+      color:#40566f;
+      line-height:1.6;
+    }
+    .tag{
+      display:inline-block;
+      margin-top:10px;
+      background:#fff8dd;
+      color:#855f00;
+      border:1px solid #edd899;
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:14px;
+      font-weight:700;
+    }
+    .content{padding:20px 22px 26px}
+    .info-grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:14px;
+      margin-bottom:18px;
+    }
+    .info-box{
+      background:#f8fbff;
+      border:1.5px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+    }
+    .info-box h3{
+      margin:0 0 10px;
+      font-size:18px;
+      color:#1d4f89;
+    }
+    .info-box p, .info-box li{
+      font-size:15px;
+      line-height:1.55;
+      color:#334155;
+      margin:0;
+    }
+    .info-box ul{margin:8px 0 0 18px; padding:0}
+    .suggestions-within{margin-top:16px; padding-top:14px; border-top:1.5px dashed #c9dbee}
+    .suggestions-within h3{font-size:17px; margin-bottom:8px}
+
+    /* Nhiệm vụ trái, gợi ý phải: hai cột trong cùng một khung */
+    .instructions-panel{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:0;
+      align-items:stretch;
+      width:100%;
+      margin-bottom:20px;
+      background:#f8fbff;
+      border:2px solid #c9dbee;
+      border-radius:18px;
+      padding:18px 20px;
+    }
+    .instructions-section{min-width:0;padding-right:20px}
+    .instructions-section h3{
+      margin:0 0 10px;
+      font-size:18px;
+      font-weight:800;
+      color:#1d4f89;
+    }
+    .instructions-section ul{margin:0 0 0 20px;padding:0}
+    .instructions-section li{font-size:15px;line-height:1.65;margin:5px 0;color:#334155}
+    .suggestions-section{margin:0;padding:0 0 0 20px;border-top:0;border-left:1.5px dashed #bfd1e7}
+
+    .student-row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-bottom:18px;
+    }
+    .field label{
+      display:block;
+      font-size:14px;
+      font-weight:700;
+      color:#3a4e67;
+      margin-bottom:6px;
+    }
+    .field input{
+      width:100%;
+      border:1.8px solid var(--line);
+      background:#fff;
+      border-radius:12px;
+      padding:12px 13px;
+      font-size:15px;
+      outline:none;
+    }
+    .field input:focus,
+    textarea:focus{
+      border-color:#7ab0ee;
+      box-shadow:0 0 0 3px rgba(79, 140, 215, 0.12);
+    }
+    .questions-title{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin:8px 0 14px;
+      flex-wrap:wrap;
+    }
+    .questions-title h3{
+      margin:0;
+      font-size:20px;
+      color:#1d4f89;
+    }
+    .btn-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:6px;
+    }
+    button{
+      border:none;
+      border-radius:12px;
+      padding:11px 16px;
+      font-size:15px;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.2s ease;
+    }
+    .btn-add{background:#e6f3ff; color:#0c5ca8; border:1px solid #b8d7f7}
+    .btn-remove{background:#fff1f0; color:#b3403a; border:1px solid #efb5b1}
+    .btn-download{background:var(--blue); color:white}
+    .btn-check{background:#eff7ee; color:#287a44; border:1px solid #bfe0c8}
+    button:hover{transform:translateY(-1px)}
+
+    .question-list{display:flex; flex-direction:column; gap:14px;}
+    .question-card{
+      border:2px solid #d7e5f6;
+      border-radius:18px;
+      padding:14px;
+      background:#fbfdff;
+      transition:0.2s ease;
+    }
+    .question-card.favorite{
+      background:var(--green-bg);
+      border-color:var(--green-bd);
+      box-shadow:0 6px 18px rgba(46,157,84,0.10);
+    }
+    .question-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:10px;
+      flex-wrap:wrap;
+    }
+    .question-number{
+      font-size:18px;
+      font-weight:800;
+      color:#184b83;
+    }
+    .favorite-label{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:14px;
+      color:#30586b;
+      font-weight:700;
+      background:#ffffff;
+      border:1px dashed #b9cedf;
+      border-radius:999px;
+      padding:8px 12px;
+    }
+    .favorite-label input{width:18px; height:18px; accent-color:#2e9d54;}
+    .favorite-chip{
+      display:none;
+      margin-top:8px;
+      font-size:13px;
+      font-weight:700;
+      color:#17713a;
+      background:#dcf8e4;
+      border:1px solid #a6dfb8;
+      border-radius:999px;
+      padding:7px 11px;
+      width:max-content;
+    }
+    .question-card.favorite .favorite-chip{display:inline-block;}
+    textarea{
+      width:100%;
+      min-height:94px;
+      height:auto;
+      overflow:hidden;
+      resize:none;
+      border:1.8px solid var(--line);
+      border-radius:14px;
+      padding:12px 13px;
+      font-size:15px;
+      line-height:1.5;
+      outline:none;
+      background:#fff;
+    }
+    .note{
+      margin-top:18px;
+      background:#fffdf3;
+      border:1.5px solid #efdf9e;
+      border-radius:16px;
+      padding:14px 15px;
+      font-size:15px;
+      color:#5f4f14;
+      line-height:1.55;
+    }
+    .footer-tip{
+      margin-top:18px;
+      font-size:14px;
+      color:#5b6472;
+      line-height:1.5;
+      font-style:italic;
+    }
+    .status{
+      margin-top:14px;
+      padding:12px 14px;
+      border-radius:14px;
+      font-size:14px;
+      display:none;
+      line-height:1.5;
+    }
+    .status.show{display:block}
+    .status.ok{background:#effaf2; border:1px solid #b5dfbf; color:#1f6b38}
+    .status.warn{background:#fff7eb; border:1px solid #f4d196; color:#8a5a00}
+    .question-card.missing,
+    .field input.missing{
+      border-color:#e05858 !important;
+      box-shadow:0 0 0 3px rgba(224,88,88,0.10);
+    }
+
+    @media (max-width: 780px){
+      .info-grid, .student-row{grid-template-columns:1fr}
+      .instructions-panel{grid-template-columns:1fr;}
+      .instructions-section{padding-right:0}
+      .suggestions-section{margin-top:14px;padding:14px 0 0;border-left:0;border-top:1.5px dashed #bfd1e7}
+      .title{font-size:26px}
+      .page{padding:0 10px 20px}
+      .content{padding:16px}
+      .header{padding:14px 16px 18px}
+    }
+
+    @media print{
+      body{background:#fff}
+      .page{margin:0; padding:0}
+      .sheet{box-shadow:none; border-radius:0}
+      .btn-row, .status{display:none !important}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div id="exportArea" class="sheet">
+      <div class="header">
+        <div class="credit">Thiết kế: Hoangntm2 - VSC Tih Times City</div>
+        <h1 class="title">EM MUỐN HỎI GÌ VỀ ẢO GIÁC AI?</h1>
+        <div class="subtitle">
+          Hãy ghi ra những câu hỏi em còn băn khoăn hoặc muốn tìm hiểu thêm về <b>Ảo giác AI</b>. Sau đó, chọn <b>1 câu hỏi em thấy thú vị và muốn được giải đáp nhất</b>.
+        </div>
+        <div class="tag">Lưu ý: Ưu tiên đặt câu hỏi có từ “Vì sao...”, “Làm thế nào...”, “Điều gì xảy ra nếu...”, “Khi nào...”</div>
+      </div>
+
+      <div class="content">
+        <div class="student-row">
+          <div class="field">
+            <label for="studentName">Họ và tên</label>
+            <input id="studentName" type="text" placeholder="Nhập họ và tên của em" />
+          </div>
+          <div class="field">
+            <label for="studentClass">Lớp</label>
+            <input id="studentClass" type="text" placeholder="Ví dụ: 5A1" />
+          </div>
+        </div>
+
+        <section class="instructions-panel" aria-label="Nhiệm vụ và gợi ý câu hỏi">
+          <div class="instructions-section">
+            <h3>📌 Nhiệm vụ của em</h3>
+            <ul>
+              <li>Viết ra những câu hỏi em còn muốn tìm hiểu về bài học <b>Ảo giác AI</b>.</li>
+              <li>Mỗi câu hỏi nên rõ ràng, ngắn gọn và tập trung vào điều em thực sự muốn biết.</li>
+              <li>Chọn <b>1 câu hỏi</b> em thấy thú vị nhất bằng cách tích chọn. Câu hỏi được chọn sẽ hiện màu xanh.</li>
+            </ul>
+          </div>
+          <div class="instructions-section suggestions-section">
+            <h3>💡 Gợi ý câu hỏi</h3>
+            <ul>
+              <li>Vì sao AI có thể trả lời sai?</li>
+              <li>Làm thế nào để kiểm tra thông tin AI?</li>
+              <li>Điều gì xảy ra nếu nhiều người tin vào thông tin sai?</li>
+            </ul>
+          </div>
+        </section>
+
+        <div class="questions-title">
+          <h3>Các câu hỏi của em</h3>
+          <div class="btn-row">
+            <button class="btn-add" type="button" onclick="addQuestion()">+ Thêm ô câu hỏi</button>
+            <button class="btn-remove" type="button" onclick="removeQuestion()">− Bớt ô câu hỏi</button>
+            <button class="btn-check" type="button" onclick="checkCompletion()">Kiểm tra hoàn thành</button>
+            <button class="btn-download" type="button" onclick="downloadPNG()">Tải câu hỏi (.png)</button>
+          </div>
+        </div>
+
+        <div id="questionList" class="question-list"></div>
+        <div id="statusBox" class="status"></div>
+
+        <div class="note">
+          <b>Lưu ý khi đặt câu hỏi:</b> Hãy ưu tiên những câu hỏi giúp em hiểu sâu hơn về bài học. Em có thể đặt câu hỏi về <b>nguyên nhân, dấu hiệu, hậu quả, cách kiểm chứng</b> hoặc cách sử dụng AI an toàn và có trách nhiệm.
+        </div>
+
+        <div class="footer-tip">
+          Sau khi tải ảnh PNG, em có thể đăng ảnh đó lên Padlet để chia sẻ với thầy cô và các bạn.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script>
+    const questionList = document.getElementById('questionList');
+    const statusBox = document.getElementById('statusBox');
+    let questionCount = 0;
+
+    function autoResizeTextarea(textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = Math.max(94, textarea.scrollHeight + 2) + 'px';
+    }
+
+    function handleQuestionInput(textarea) {
+      autoResizeTextarea(textarea);
+      clearMissing(textarea);
+    }
+
+    function createQuestionCard(value = '') {
+      questionCount += 1;
+      const card = document.createElement('div');
+      card.className = 'question-card';
+      card.dataset.index = questionCount;
+      card.innerHTML = `
+        <div class="question-head">
+          <div class="question-number">Câu hỏi ${questionCount}</div>
+          <label class="favorite-label">
+            <input type="checkbox" class="favorite-check" onchange="toggleFavorite(this)">
+            Em muốn giải đáp câu hỏi này nhất
+          </label>
+        </div>
+        <textarea placeholder="Viết câu hỏi của em vào đây..." oninput="handleQuestionInput(this)">${value}</textarea>
+        <div class="favorite-chip">✓ Câu hỏi em muốn giải đáp nhất</div>
+      `;
+      questionList.appendChild(card);
+      autoResizeTextarea(card.querySelector('textarea'));
+      refreshNumbers();
+    }
+
+    function refreshNumbers() {
+      [...questionList.querySelectorAll('.question-card')].forEach((card, idx) => {
+        card.querySelector('.question-number').textContent = `Câu hỏi ${idx + 1}`;
+      });
+    }
+
+    function addQuestion() {
+      createQuestionCard();
+      hideStatus();
+    }
+
+    function removeQuestion() {
+      const cards = questionList.querySelectorAll('.question-card');
+      if (cards.length > 1) {
+        cards[cards.length - 1].remove();
+        refreshNumbers();
+        hideStatus();
+      } else {
+        showStatus('warn', 'Cần giữ lại ít nhất 1 ô câu hỏi.');
+      }
+    }
+
+    function toggleFavorite(checkbox) {
+      const allChecks = questionList.querySelectorAll('.favorite-check');
+      const currentCard = checkbox.closest('.question-card');
+
+      if (checkbox.checked) {
+        allChecks.forEach(ch => {
+          if (ch !== checkbox) ch.checked = false;
+          ch.closest('.question-card').classList.remove('favorite');
+        });
+        currentCard.classList.add('favorite');
+      } else {
+        currentCard.classList.remove('favorite');
+      }
+      hideStatus();
+    }
+
+    function clearMissing(el) {
+      el.classList.remove('missing');
+      el.closest('.question-card').classList.remove('missing');
+      hideStatus();
+    }
+
+    function sanitizeName(text) {
+      return (text || '')
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd').replace(/Đ/g, 'D')
+        .replace(/[^a-zA-Z0-9]+/g, '_')
+        .replace(/^_+|_+$/g, '') || 'Hoc_sinh';
+    }
+
+    function showStatus(type, message) {
+      statusBox.className = `status show ${type}`;
+      statusBox.innerHTML = message;
+    }
+
+    function hideStatus() {
+      statusBox.className = 'status';
+      statusBox.innerHTML = '';
+    }
+
+    function checkCompletion(forDownload = false) {
+      const studentName = document.getElementById('studentName');
+      const studentClass = document.getElementById('studentClass');
+      const cards = [...questionList.querySelectorAll('.question-card')];
+      let missingItems = [];
+
+      studentName.classList.remove('missing');
+      studentClass.classList.remove('missing');
+      cards.forEach(card => card.classList.remove('missing'));
+
+      if (!studentName.value.trim()) {
+        studentName.classList.add('missing');
+        missingItems.push('Họ và tên');
+      }
+      if (!studentClass.value.trim()) {
+        studentClass.classList.add('missing');
+        missingItems.push('Lớp');
+      }
+
+      let hasQuestion = false;
+      cards.forEach((card, idx) => {
+        const textarea = card.querySelector('textarea');
+        if (textarea.value.trim()) {
+          hasQuestion = true;
+        }
+      });
+
+      if (!hasQuestion) {
+        cards[0].classList.add('missing');
+        cards[0].querySelector('textarea').classList.add('missing');
+        missingItems.push('Ít nhất 1 câu hỏi');
+      }
+
+      const favorite = questionList.querySelector('.favorite-check:checked');
+      if (!favorite) {
+        missingItems.push('Chọn 1 câu hỏi em muốn giải đáp nhất');
+      }
+
+      if (missingItems.length > 0) {
+        showStatus('warn', `<b>Em cần hoàn thành thêm:</b> ${missingItems.join('; ')}.`);
+        return false;
+      }
+
+      if (!forDownload) {
+        showStatus('ok', 'Rất tốt! Em đã hoàn thành phiếu câu hỏi và có thể tải ảnh PNG để đăng lên Padlet.');
+      }
+      return true;
+    }
+
+    async function downloadPNG() {
+      if (!checkCompletion(true)) return;
+
+      const exportArea = document.getElementById('exportArea');
+      const studentName = document.getElementById('studentName').value.trim();
+      const studentClass = document.getElementById('studentClass').value.trim();
+      const fileName = `${sanitizeName(studentClass)}_${sanitizeName(studentName)}_Cau_hoi_Ao_giac_AI.png`;
+
+      const buttons = document.querySelector('.btn-row');
+      const status = document.getElementById('statusBox');
+      const originalButtonsDisplay = buttons.style.display;
+      const originalStatusDisplay = status.style.display;
+      buttons.style.display = 'none';
+      status.style.display = 'none';
+
+      // Ensure every answer expands fully before capturing the form.
+      questionList.querySelectorAll('textarea').forEach(autoResizeTextarea);
+      window.scrollTo(0, 0);
+      try {
+        const canvas = await html2canvas(exportArea, {
+          scale: 2,
+          backgroundColor: '#ffffff',
+          useCORS: true,
+          scrollX: 0,
+          scrollY: -window.scrollY
+        });
+        const link = document.createElement('a');
+        link.download = fileName;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        showStatus('ok', 'Đã tải ảnh PNG thành công. Em có thể đăng ảnh này lên Padlet.');
+      } catch (error) {
+        console.error(error);
+        showStatus('warn', 'Có lỗi khi tạo ảnh PNG. Em hãy thử lại.');
+      } finally {
+        buttons.style.display = originalButtonsDisplay || 'flex';
+        status.style.display = originalStatusDisplay || '';
+      }
+    }
+
+    // Initial cards
+    createQuestionCard();
+    createQuestionCard();
+    createQuestionCard();
+  </script>
+</body>
+</html>
